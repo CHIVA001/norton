@@ -4,8 +4,10 @@
  * MySQLi Connection Handler with Error Handling
  */
 
-// Base URL for the application
-define('BASE_URL', 'http://localhost/travel_agency_1/');
+// Base URL for the application - MUST be defined first before any redirects
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost/travel_agency_1/');
+}
 
 // Database credentials
 define('DB_HOST', 'localhost');

@@ -4,6 +4,11 @@
  * Navigation and page header
  */
 
+// Define BASE_URL FIRST - before anything else
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost/travel_agency_1/');
+}
+
 if (!isset($_SESSION)) {
     session_start();
 }
