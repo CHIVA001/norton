@@ -76,10 +76,10 @@ $stmt->close();
                 <select class="form-select" id="country" name="country">
                     <option value="">All Countries</option>
                     <?php foreach ($countries as $dest): ?>
-                        <option value="<?php echo htmlspecialchars($dest['country']); ?>" 
-                                <?php echo $country === $dest['country'] ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($dest['country']); ?>
-                        </option>
+                    <option value="<?php echo htmlspecialchars($dest['country']); ?>"
+                        <?php echo $country === $dest['country'] ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($dest['country']); ?>
+                    </option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -93,52 +93,53 @@ $stmt->close();
 
 <!-- Destinations Grid -->
 <?php if (empty($destinations)): ?>
-    <div class="alert alert-info text-center">
-        <i class="fas fa-search fa-2x mb-2"></i><br>
-        No destinations found.
-    </div>
+<div class="alert alert-info text-center">
+    <i class="fas fa-search fa-2x mb-2"></i><br>
+    No destinations found.
+</div>
 <?php else: ?>
-    <div class="row">
-        <?php foreach ($destinations as $destination): ?>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <?php if (!empty($destination['imageUrl'])): ?>
-                        <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($destination['imageUrl']); ?>" 
-                             class="card-img-top" style="height: 250px; object-fit: cover;" alt="<?php echo htmlspecialchars($destination['name']); ?>">
-                    <?php else: ?>
-                        <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">
-                            <i class="fas fa-image fa-3x text-muted"></i>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><?php echo htmlspecialchars($destination['name']); ?></h5>
-                        <p class="card-text text-muted mb-2">
-                            <i class="fas fa-flag"></i> <?php echo htmlspecialchars($destination['country']); ?>
-                        </p>
-                        
-                        <p class="card-text flex-grow-1">
-                            <?php echo nl2br(htmlspecialchars(substr($destination['description'], 0, 100))); ?>...
-                        </p>
-                        
-                        <?php if (!empty($destination['bestTimeToVisit'])): ?>
-                            <p class="card-text mb-3">
-                                <small class="text-muted">
-                                    <i class="fas fa-calendar-alt"></i> Best Time: <?php echo htmlspecialchars($destination['bestTimeToVisit']); ?>
-                                </small>
-                            </p>
-                        <?php endif; ?>
-                        
-                        <a href="<?php echo BASE_URL; ?>tours/tour-list.php?destination=<?php echo urlencode($destination['name']); ?>" 
-                           class="btn btn-primary mt-auto">View Tours</a>
-                    </div>
-                </div>
+<div class="row">
+    <?php foreach ($destinations as $destination): ?>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <?php if (!empty($destination['imageUrl'])): ?>
+            <img src="<?php echo BASE_URL . htmlspecialchars($destination['imageUrl']); ?>" class="card-img-top"
+                style="height: 250px; object-fit: cover;" alt="<?php echo htmlspecialchars($destination['name']); ?>">
+            <?php else: ?>
+            <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">
+                <i class="fas fa-image fa-3x text-muted"></i>
             </div>
-        <?php endforeach; ?>
+            <?php endif; ?>
+
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><?php echo htmlspecialchars($destination['name']); ?></h5>
+                <p class="card-text text-muted mb-2">
+                    <i class="fas fa-flag"></i> <?php echo htmlspecialchars($destination['country']); ?>
+                </p>
+
+                <p class="card-text flex-grow-1">
+                    <?php echo nl2br(htmlspecialchars(substr($destination['description'], 0, 100))); ?>...
+                </p>
+
+                <?php if (!empty($destination['bestTimeToVisit'])): ?>
+                <p class="card-text mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar-alt"></i> Best Time:
+                        <?php echo htmlspecialchars($destination['bestTimeToVisit']); ?>
+                    </small>
+                </p>
+                <?php endif; ?>
+
+                <a href="<?php echo BASE_URL; ?>tours/tour-list.php?destination=<?php echo urlencode($destination['name']); ?>"
+                    class="btn btn-primary mt-auto">View Tours</a>
+            </div>
+        </div>
     </div>
-    
-    <!-- Pagination -->
-    <?php echo getPaginationHTML($pagination, 'page'); ?>
+    <?php endforeach; ?>
+</div>
+
+<!-- Pagination -->
+<?php echo getPaginationHTML($pagination, 'page'); ?>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

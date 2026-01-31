@@ -26,6 +26,7 @@ $duration = '';
 $destination = '';
 // image path stored in DB
 $imageUrl = '';
+$destinationId = 0;
 $maxCapacity = 0;
 
 // Handle form submission
@@ -35,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['price'] ?? 0);
     $duration = intval($_POST['duration'] ?? 0);
     $destination = sanitize($_POST['destination'] ?? '');
+    // If a numeric destination id is passed from select, it will be handled later
     $maxCapacity = intval($_POST['max_capacity'] ?? 0);
 
     // Handle image upload
@@ -111,6 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Fetch destinations for the select dropdown
+$stmt = $conn->prepare("SELECT id, name FROM destinations ORDER BY name ASC");
+$stmt->execute();
+$destinations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
@@ -154,8 +162,14 @@ require_once __DIR__ . '/../includes/header.php';
 
                     <div class="mb-3">
                         <label for="destination" class="form-label">Destination *</label>
-                        <input type="text" class="form-control" id="destination" name="destination"
-                            value="<?php echo htmlspecialchars($destination); ?>" required>
+                        <select class="form-select" id="destination" name="destination" required>
+                            <option value="">Select Destination</option>
+                            <?php foreach ($destinations as $d): ?>
+                                <option value="<?php echo $d['id']; ?>" <?php echo (intval($destination) === intval($d['id'])) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($d['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="mb-3">

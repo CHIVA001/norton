@@ -35,7 +35,7 @@ if (!$tour) {
 
 // Check if user has completed booking for this tour
 $stmt = $conn->prepare("
-    SELECT id FROM bookings
+    SELECT id, bookingCode FROM bookings
     WHERE userId = ? AND tourId = ? AND status = 'completed'
     LIMIT 1
 ");
@@ -55,7 +55,7 @@ $errors = [];
 $successMessage = '';
 
 // Check if already reviewed
-$stmt = $conn->prepare("SELECT id FROM reviews WHERE userId = ? AND bookingId = ?");
+$stmt = $conn->prepare("SELECT id, rating, comment FROM reviews WHERE userId = ? AND bookingId = ? LIMIT 1");
 $stmt->bind_param("ii", $userId, $booking['id']);
 $stmt->execute();
 $existingReview = $stmt->get_result()->fetch_assoc();
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 INSERT INTO reviews (userId, tourId, bookingId, rating, comment)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $stmt->bind_param("iiis", $userId, $tourId, $booking['id'], $rating, $comment);
+            $stmt->bind_param("iiiis", $userId, $tourId, $booking['id'], $rating, $comment);
             $message = 'Review submitted successfully!';
         }
 

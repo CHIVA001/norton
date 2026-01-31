@@ -69,7 +69,7 @@ require_once __DIR__ . '/../includes/header.php';
                         <tr>
                             <td>
                                 <?php if (!empty($dest['imageUrl'])): ?>
-                                    <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($dest['imageUrl']); ?>"
+                                    <img src="<?php echo BASE_URL . htmlspecialchars($dest['imageUrl']); ?>"
                                         style="height: 50px; width: 50px; object-fit: cover;" class="rounded">
                                 <?php else: ?>
                                     <i class="fas fa-image text-muted"></i>
