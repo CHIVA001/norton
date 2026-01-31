@@ -384,32 +384,88 @@ function handleFileUpload($file, $uploadDir, $allowedTypes = ['image/jpeg', 'ima
 {
     // Ensure upload directory exists
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+        if (!mkdir($uploadDir, 0755, true)) {
+            return ['success' => false, 'error' => 'Failed to create upload directory'];
+        }
     }
 
-    // Validate file
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        return ['success' => false, 'error' => 'File upload error: ' . $file['error']];
+    // Ensure directory is writable
+    if (!is_writable($uploadDir)) {
+        // attempt to set permissions
+        @chmod($uploadDir, 0755);
+        if (!is_writable($uploadDir)) {
+            return ['success' => false, 'error' => 'Upload directory is not writable'];
+        }
+    }
+
+    // Basic upload error check
+    if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+        $err = $file['error'] ?? 'unknown';
+        return ['success' => false, 'error' => 'File upload error: ' . $err];
+    }
+
+    // Ensure temporary uploaded file exists
+    if (empty($file['tmp_name']) || !file_exists($file['tmp_name'])) {
+        return ['success' => false, 'error' => 'Temporary uploaded file is missing'];
     }
 
     if ($file['size'] > $maxSize) {
         return ['success' => false, 'error' => 'File size exceeds maximum limit'];
     }
 
-    if (!in_array($file['type'], $allowedTypes)) {
+    // Determine MIME type from the actual file (more reliable than client-provided type)
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = $finfo ? finfo_file($finfo, $file['tmp_name']) : null;
+    if ($finfo)
+        finfo_close($finfo);
+
+    if ($mime === false || !in_array($mime, $allowedTypes)) {
         return ['success' => false, 'error' => 'File type not allowed'];
     }
 
-    // Generate unique filename
-    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $filename = uniqid('img_', true) . '.' . $ext;
-    $filepath = $uploadDir . '/' . $filename;
-
-    if (move_uploaded_file($file['tmp_name'], $filepath)) {
-        return ['success' => true, 'filename' => $filename];
+    // Verify it's a valid image
+    if (@getimagesize($file['tmp_name']) === false) {
+        return ['success' => false, 'error' => 'Uploaded file is not a valid image'];
     }
 
-    return ['success' => false, 'error' => 'Failed to move uploaded file'];
+    // Map MIME to extension when possible
+    $extMap = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif'
+    ];
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (isset($extMap[$mime])) {
+        $ext = $extMap[$mime];
+    }
+
+    $filename = uniqid('img_', true) . '.' . $ext;
+    $filepath = rtrim($uploadDir, '/\\') . DIRECTORY_SEPARATOR . $filename;
+
+    // Prefer move_uploaded_file but provide a fallback (copy) in environments where move fails
+    if (is_uploaded_file($file['tmp_name'])) {
+        if (@move_uploaded_file($file['tmp_name'], $filepath)) {
+            return ['success' => true, 'filename' => $filename];
+        }
+        // fallback
+        if (@copy($file['tmp_name'], $filepath)) {
+            return ['success' => true, 'filename' => $filename];
+        }
+    } else {
+        // Not marked as an uploaded file (could happen in some dev setups). Try copy.
+        if (@copy($file['tmp_name'], $filepath)) {
+            return ['success' => true, 'filename' => $filename];
+        }
+    }
+
+    // Detailed diagnostic for easier troubleshooting
+    $details = [];
+    $details[] = 'tmp_exists=' . (file_exists($file['tmp_name']) ? 'yes' : 'no');
+    $details[] = 'is_uploaded=' . (is_uploaded_file($file['tmp_name']) ? 'yes' : 'no');
+    $details[] = 'dir_writable=' . (is_writable($uploadDir) ? 'yes' : 'no');
+
+    return ['success' => false, 'error' => 'Failed to move uploaded file (' . implode(';', $details) . ')'];
 }
 
 ?>
