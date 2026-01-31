@@ -92,80 +92,81 @@ require_once __DIR__ . '/../includes/header.php';
 
 <!-- Bookings List -->
 <?php if (empty($bookings)): ?>
-    <div class="alert alert-info text-center py-5">
-        <i class="fas fa-inbox fa-3x mb-3"></i><br>
-        <strong>No bookings found</strong><br>
-        <a href="<?php echo BASE_URL; ?>tours/tour-list.php" class="btn btn-primary mt-3">Browse Tours</a>
-    </div>
+<div class="alert alert-info text-center py-5">
+    <i class="fas fa-inbox fa-3x mb-3"></i><br>
+    <strong>No bookings found</strong><br>
+    <a href="<?php echo BASE_URL; ?>tours/tour-list.php" class="btn btn-primary mt-3">Browse Tours</a>
+</div>
 <?php else: ?>
-    <div class="row">
-        <?php foreach ($bookings as $booking): ?>
-            <div class="col-md-12 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <?php if (!empty($booking['imageUrl'])): ?>
-                                    <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($booking['imageUrl']); ?>"
-                                        class="img-fluid rounded" alt="Tour" style="height: 150px; object-fit: cover;">
-                                <?php else: ?>
-                                    <div class="bg-light d-flex justify-content-center align-items-center rounded"
-                                        style="height: 150px;">
-                                        <i class="fas fa-image fa-2x text-muted"></i>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="col-md-7">
-                                <h5><?php echo htmlspecialchars(substr($booking['title'], 0, 50)); ?></h5>
-
-                                <p class="text-muted mb-2">
-                                    <strong>Code:</strong> <code><?php echo htmlspecialchars($booking['bookingCode']); ?></code>
-                                </p>
-
-                                <dl class="row mb-0">
-                                    <dt class="col-sm-4">Booking Date:</dt>
-                                    <dd class="col-sm-8"><?php echo formatDate($booking['createdAt']); ?></dd>
-
-                                    <dt class="col-sm-4">Start Date:</dt>
-                                    <dd class="col-sm-8"><?php echo formatDate($booking['startDate']); ?></dd>
-
-                                    <dt class="col-sm-4">Travelers:</dt>
-                                    <dd class="col-sm-8"><?php echo $booking['numberOfPeople']; ?> people</dd>
-                                </dl>
-                            </div>
-
-                            <div class="col-md-3 text-end">
-                                <div class="mb-3">
-                                    <p class="mb-1">
-                                        <strong>Total Amount:</strong><br>
-                                    <h5 class="text-primary"><?php echo formatCurrency($booking['totalPrice']); ?></h5>
-                                    </p>
-                                </div>
-
-                                <div class="mb-3">
-                                    <p class="mb-1">
-                                        <strong>Status:</strong><br><?php echo getBookingStatusBadge($booking['status']); ?></p>
-                                </div>
-
-                                <div class="mb-3">
-                                    <p class="mb-1">
-                                        <strong>Payment:</strong><br><?php echo getPaymentStatusBadge($booking['paymentStatus']); ?>
-                                    </p>
-                                </div>
-
-                                <a href="booking-details.php?id=<?php echo $booking['id']; ?>"
-                                    class="btn btn-sm btn-primary">View Details</a>
-                            </div>
+<div class="row">
+    <?php foreach ($bookings as $booking): ?>
+    <div class="col-md-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <?php if (!empty($booking['imageUrl'])): ?>
+                        <img src="<?php echo BASE_URL . htmlspecialchars($booking['imageUrl']); ?>"
+                            class="img-fluid rounded" alt="Tour" style="height: 150px; object-fit: cover;">
+                        <?php else: ?>
+                        <div class="bg-light d-flex justify-content-center align-items-center rounded"
+                            style="height: 150px;">
+                            <i class="fas fa-image fa-2x text-muted"></i>
                         </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="col-md-7">
+                        <h5><?php echo htmlspecialchars(substr($booking['title'], 0, 50)); ?></h5>
+
+                        <p class="text-muted mb-2">
+                            <strong>Code:</strong> <code><?php echo htmlspecialchars($booking['bookingCode']); ?></code>
+                        </p>
+
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Booking Date:</dt>
+                            <dd class="col-sm-8"><?php echo formatDate($booking['createdAt']); ?></dd>
+
+                            <dt class="col-sm-4">Start Date:</dt>
+                            <dd class="col-sm-8"><?php echo formatDate($booking['startDate']); ?></dd>
+
+                            <dt class="col-sm-4">Travelers:</dt>
+                            <dd class="col-sm-8"><?php echo $booking['numberOfPeople']; ?> people</dd>
+                        </dl>
+                    </div>
+
+                    <div class="col-md-3 text-end">
+                        <div class="mb-3">
+                            <p class="mb-1">
+                                <strong>Total Amount:</strong><br>
+                            <h5 class="text-primary"><?php echo formatCurrency($booking['totalPrice']); ?></h5>
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="mb-1">
+                                <strong>Status:</strong><br><?php echo getBookingStatusBadge($booking['status']); ?>
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="mb-1">
+                                <strong>Payment:</strong><br><?php echo getPaymentStatusBadge($booking['paymentStatus']); ?>
+                            </p>
+                        </div>
+
+                        <a href="booking-details.php?id=<?php echo $booking['id']; ?>"
+                            class="btn btn-sm btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
-        <?php endforeach; ?>
+        </div>
     </div>
+    <?php endforeach; ?>
+</div>
 
-    <!-- Pagination -->
-    <?php
+<!-- Pagination -->
+<?php
     if (!empty($statusFilter)) {
         echo getPaginationHTML($pagination, 'page');
     } else {

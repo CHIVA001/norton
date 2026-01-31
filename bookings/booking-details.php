@@ -70,7 +70,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <?php if (!empty($booking['imageUrl'])): ?>
-                            <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($booking['imageUrl']); ?>"
+                            <img src="<?php echo BASE_URL . htmlspecialchars($booking['imageUrl']); ?>"
                                 class="img-fluid rounded" alt="Tour">
                         <?php else: ?>
                             <div class="bg-light d-flex justify-content-center align-items-center rounded"
@@ -141,7 +141,8 @@ require_once __DIR__ . '/../includes/header.php';
                         <tr>
                             <td>Price per Person:</td>
                             <td class="text-end">
-                                <?php echo formatCurrency($booking['totalPrice'] / $booking['numberOfPeople']); ?></td>
+                                <?php echo formatCurrency($booking['totalPrice'] / $booking['numberOfPeople']); ?>
+                            </td>
                         </tr>
                         <tr>
                             <td>Number of People:</td>
