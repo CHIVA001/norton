@@ -4,6 +4,7 @@
  * Destroys session and logs user out
  */
 
+require_once __DIR__ . '/../config/database.php';
 session_start();
 
 // Destroy session

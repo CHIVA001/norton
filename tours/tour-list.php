@@ -206,7 +206,7 @@ $stmt->close();
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <?php if (!empty($tour['imageUrl'])): ?>
-                        <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($tour['imageUrl']); ?>" 
+                        <img src="<?php echo BASE_URL . htmlspecialchars($tour['imageUrl']); ?>" 
                              class="card-img-top" style="height: 250px; object-fit: cover;" alt="<?php echo htmlspecialchars($tour['title']); ?>">
                     <?php else: ?>
                         <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">

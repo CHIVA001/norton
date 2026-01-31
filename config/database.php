@@ -27,7 +27,7 @@ if ($conn->connect_error) {
     // Display user-friendly error message
     die("Connection to database failed. Please try again later.");
 }
-// echo "Database connected successfully!";
+
 // Set charset to utf8mb4
 if (!$conn->set_charset("utf8mb4")) {
     error_log("Error loading character set utf8mb4: " . $conn->error);

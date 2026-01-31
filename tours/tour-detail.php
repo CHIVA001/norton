@@ -92,8 +92,8 @@ $pageTitle = htmlspecialchars($tour['title']) . ' - Travel Agency';
         <!-- Main Image -->
         <div class="mb-4">
             <?php if (!empty($tour['imageUrl'])): ?>
-                <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($tour['imageUrl']); ?>"
-                    class="img-fluid rounded mb-3" style="max-height: 400px; object-fit: cover; width: 100%;"
+                <img src="<?php echo BASE_URL . htmlspecialchars($tour['imageUrl']); ?>" class="img-fluid rounded mb-3"
+                    style="max-height: 400px; object-fit: cover; width: 100%;"
                     alt="<?php echo htmlspecialchars($tour['title']); ?>">
             <?php else: ?>
                 <div class="bg-light d-flex justify-content-center align-items-center rounded mb-3" style="height: 400px;">
@@ -109,8 +109,8 @@ $pageTitle = htmlspecialchars($tour['title']) . ' - Travel Agency';
                 <div class="row g-3">
                     <?php foreach ($gallery as $image): ?>
                         <div class="col-md-4">
-                            <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($image['imageUrl']); ?>"
-                                class="img-fluid rounded" alt="Gallery">
+                            <img src="<?php echo BASE_URL . htmlspecialchars($image['imageUrl']); ?>" class="img-fluid rounded"
+                                alt="Gallery">
                         </div>
                     <?php endforeach; ?>
                 </div>

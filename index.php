@@ -98,30 +98,33 @@ $stmt->close();
     </div>
 
     <?php foreach ($destinations as $dest): ?>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <?php if (!empty($dest['imageUrl'])): ?>
-                    <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($dest['imageUrl']); ?>"
-                        class="card-img-top" style="height: 250px; object-fit: cover;"
-                        alt="<?php echo htmlspecialchars($dest['name']); ?>">
-                <?php else: ?>
-                    <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">
-                        <i class="fas fa-image fa-3x text-muted"></i>
-                    </div>
-                <?php endif; ?>
-
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo htmlspecialchars($dest['name']); ?></h5>
-                    <p class="card-text text-muted"><?php echo htmlspecialchars($dest['country']); ?></p>
-                    <p class="card-text">
-                        <small class="text-muted"><?php echo $dest['tourCount']; ?> tours available</small>
-                    </p>
-
-                    <a href="<?php echo BASE_URL; ?>tours/tour-list.php?destination=<?php echo urlencode($dest['name']); ?>"
-                        class="btn btn-primary">View Tours</a>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <?php if (!empty($dest['imageUrl'])): ?>
+            <img src="<?php echo BASE_URL . htmlspecialchars($dest['imageUrl']); ?>" class="card-img-top"
+                style="height: 250px; object-fit: cover;" alt="<?php echo htmlspecialchars($dest['name']); ?>">
+            <?php else: ?>
+            <div class="bg-gradient text-white d-flex justify-content-center align-items-center"
+                style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="text-center">
+                    <i class="fas fa-map-pin fa-3x mb-2"></i>
+                    <p class="fw-bold"><?php echo htmlspecialchars($dest['name']); ?></p>
                 </div>
             </div>
+            <?php endif; ?>
+
+            <div class="card-body">
+                <h5 class="card-title"><?php echo htmlspecialchars($dest['name']); ?></h5>
+                <p class="card-text text-muted"><?php echo htmlspecialchars($dest['country']); ?></p>
+                <p class="card-text">
+                    <small class="text-muted"><?php echo $dest['tourCount']; ?> tours available</small>
+                </p>
+
+                <a href="<?php echo BASE_URL; ?>tours/tour-list.php?destination=<?php echo urlencode($dest['name']); ?>"
+                    class="btn btn-primary">View Tours</a>
+            </div>
         </div>
+    </div>
     <?php endforeach; ?>
 </div>
 
@@ -132,50 +135,49 @@ $stmt->close();
     </div>
 
     <?php foreach ($featuredTours as $tour): ?>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <?php if (!empty($tour['imageUrl'])): ?>
-                    <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($tour['imageUrl']); ?>"
-                        class="card-img-top" style="height: 250px; object-fit: cover;"
-                        alt="<?php echo htmlspecialchars($tour['title']); ?>">
-                <?php else: ?>
-                    <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">
-                        <i class="fas fa-image fa-3x text-muted"></i>
-                    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <?php if (!empty($tour['imageUrl'])): ?>
+            <img src="<?php echo BASE_URL . htmlspecialchars($tour['imageUrl']); ?>" class="card-img-top"
+                style="height: 250px; object-fit: cover;" alt="<?php echo htmlspecialchars($tour['title']); ?>">
+            <?php else: ?>
+            <div class="bg-light d-flex justify-content-center align-items-center" style="height: 250px;">
+                <i class="fas fa-image fa-3x text-muted"></i>
+            </div>
+            <?php endif; ?>
+
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><?php echo htmlspecialchars(substr($tour['title'], 0, 40)); ?></h5>
+
+                <p class="card-text text-muted mb-2">
+                    <i class="fas fa-location-dot"></i> <?php echo htmlspecialchars($tour['destinationName']); ?>
+                </p>
+
+                <p class="card-text mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar-days"></i> <?php echo $tour['duration']; ?> days
+                    </small>
+                </p>
+
+                <?php if ($tour['rating'] > 0): ?>
+                <p class="card-text mb-2">
+                    <small><?php echo getRatingStars($tour['rating']); ?> (<?php echo $tour['reviewCount']; ?>)</small>
+                </p>
                 <?php endif; ?>
 
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><?php echo htmlspecialchars(substr($tour['title'], 0, 40)); ?></h5>
+                <p class="card-text flex-grow-1">
+                    <small><?php echo htmlspecialchars(substr($tour['description'], 0, 80)); ?>...</small>
+                </p>
 
-                    <p class="card-text text-muted mb-2">
-                        <i class="fas fa-location-dot"></i> <?php echo htmlspecialchars($tour['destinationName']); ?>
-                    </p>
-
-                    <p class="card-text mb-2">
-                        <small class="text-muted">
-                            <i class="fas fa-calendar-days"></i> <?php echo $tour['duration']; ?> days
-                        </small>
-                    </p>
-
-                    <?php if ($tour['rating'] > 0): ?>
-                        <p class="card-text mb-2">
-                            <small><?php echo getRatingStars($tour['rating']); ?> (<?php echo $tour['reviewCount']; ?>)</small>
-                        </p>
-                    <?php endif; ?>
-
-                    <p class="card-text flex-grow-1">
-                        <small><?php echo htmlspecialchars(substr($tour['description'], 0, 80)); ?>...</small>
-                    </p>
-
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="h5 mb-0"><?php echo formatCurrency($tour['price']); ?></span>
-                    </div>
-
-                    <a href="<?php echo BASE_URL; ?>tours/tour-detail.php?id=<?php echo $tour['id']; ?>"
-                        class="btn btn-primary mt-3">View Details</a>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 mb-0"><?php echo formatCurrency($tour['price']); ?></span>
                 </div>
+
+                <a href="<?php echo BASE_URL; ?>tours/tour-detail.php?id=<?php echo $tour['id']; ?>"
+                    class="btn btn-primary mt-3">View Details</a>
             </div>
         </div>
+    </div>
     <?php endforeach; ?>
 </div>
 

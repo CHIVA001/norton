@@ -93,9 +93,14 @@ require_once __DIR__ . '/../includes/header.php';
                                 </span>
                             </td>
                             <td>
-                                <a href="edit-tour.php?id=<?php echo $tour['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="delete-tour.php?id=<?php echo $tour['id']; ?>" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Delete this tour?')">Delete</a>
+                                <a href="<?php echo BASE_URL; ?>tours/edit-tour.php?id=<?php echo $tour['id']; ?>"
+                                    class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="<?php echo BASE_URL; ?>tours/delete-tour.php?id=<?php echo $tour['id']; ?>"
+                                    class="btn btn-sm btn-danger" onclick="return confirm('Delete this tour?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

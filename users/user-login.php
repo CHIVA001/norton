@@ -4,13 +4,8 @@
  * Allows users to log in with email and password
  */
 
-// Define BASE_URL FIRST - before anything else
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://localhost/travel_agency_1/');
-}
-
-session_start();
 require_once __DIR__ . '/../config/database.php';
+session_start();
 require_once __DIR__ . '/../includes/functions.php';
 
 $pageTitle = 'User Login - Travel Agency';
@@ -102,15 +97,10 @@ require_once __DIR__ . '/../includes/header.php';
 
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
-                I
                 <hr>
                 <p class="text-center">Don't have an account? <a href="user-registration.php">Sign up here</a></p>
 
-                <div class="alert alert-info mt-3">
-                    <strong>Demo Account:</strong><br>
-                    Email: admin@travel.com<br>
-                    Password: Admin@123
-                </div>
+
             </div>
         </div>
     </div>
