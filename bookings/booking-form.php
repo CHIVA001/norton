@@ -207,8 +207,8 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
             <div class="card-body">
                 <?php if (!empty($tour['imageUrl'])): ?>
-                    <img src="<?php echo BASE_URL . 'uploads/tours/' . htmlspecialchars($tour['imageUrl']); ?>"
-                        class="img-fluid rounded mb-3" alt="Tour">
+                    <img src="<?php echo BASE_URL . htmlspecialchars($tour['imageUrl']); ?>" class="img-fluid rounded mb-3"
+                        alt="Tour">
                 <?php else: ?>
                     <div class="bg-light d-flex justify-content-center align-items-center rounded mb-3"
                         style="height: 200px;">

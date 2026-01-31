@@ -26,6 +26,7 @@ $duration = '';
 $destination = '';
 // image path stored in DB
 $imageUrl = '';
+$maxCapacity = 0;
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['price'] ?? 0);
     $duration = intval($_POST['duration'] ?? 0);
     $destination = sanitize($_POST['destination'] ?? '');
+    $maxCapacity = intval($_POST['max_capacity'] ?? 0);
 
     // Handle image upload
     if (!empty($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -61,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (empty($tour_name) || empty($description) || empty($price) || empty($duration) || empty($destination)) {
-        $error = 'All fields are required';
+    if (empty($tour_name) || empty($description) || empty($price) || empty($duration) || empty($destination) || $maxCapacity <= 0) {
+        $error = 'All fields are required and max capacity must be greater than 0';
     } else {
         // Resolve destination to destinationId (use existing or insert new)
         $destinationId = 0;
@@ -91,10 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Insert tour into database using schema column names (include imageUrl)
-        $stmt = $conn->prepare("INSERT INTO tours (title, description, price, duration, destinationId, imageUrl) VALUES (?, ?, ?, ?, ?, ?)");
-        // types: title (s), description (s), price (d), duration (i), destinationId (i), imageUrl (s)
-        $stmt->bind_param("ssdiis", $tour_name, $description, $price, $duration, $destinationId, $imageUrl);
+        // Insert tour into database using schema column names (include maxCapacity and imageUrl)
+        $stmt = $conn->prepare("INSERT INTO tours (title, description, price, duration, destinationId, maxCapacity, imageUrl) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // types: title (s), description (s), price (d), duration (i), destinationId (i), maxCapacity (i), imageUrl (s)
+        $stmt->bind_param("ssdiiis", $tour_name, $description, $price, $duration, $destinationId, $maxCapacity, $imageUrl);
 
         if ($stmt->execute()) {
             $_SESSION['message'] = 'Tour added successfully!';
@@ -149,10 +151,17 @@ require_once __DIR__ . '/../includes/header.php';
                             value="<?php echo htmlspecialchars($duration); ?>" required>
                     </div>
 
+
                     <div class="mb-3">
                         <label for="destination" class="form-label">Destination *</label>
                         <input type="text" class="form-control" id="destination" name="destination"
                             value="<?php echo htmlspecialchars($destination); ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="max_capacity" class="form-label">Max Capacity *</label>
+                        <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1"
+                            value="<?php echo htmlspecialchars($maxCapacity); ?>" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Add Tour</button>

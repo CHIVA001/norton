@@ -43,6 +43,7 @@ $price = $tour['price'];
 $duration = $tour['duration'];
 $destination = $tour['destinationId'];
 $imageUrl = $tour['imageUrl'] ?? '';
+$maxCapacity = $tour['maxCapacity'] ?? 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['tour_name'] ?? '');
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['price'] ?? 0);
     $duration = intval($_POST['duration'] ?? 0);
     $destination = sanitize($_POST['destination'] ?? '');
+    $maxCapacity = intval($_POST['max_capacity'] ?? 0);
 
     // Handle image upload (optional)
     if (!empty($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -104,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtDest->close();
         }
 
-        $stmtUp = $conn->prepare("UPDATE tours SET title = ?, description = ?, price = ?, duration = ?, destinationId = ?, imageUrl = ? WHERE id = ?");
-        $stmtUp->bind_param("ssdiisi", $title, $description, $price, $duration, $destinationId, $imageUrl, $id);
+        $stmtUp = $conn->prepare("UPDATE tours SET title = ?, description = ?, price = ?, duration = ?, destinationId = ?, maxCapacity = ?, imageUrl = ? WHERE id = ?");
+        $stmtUp->bind_param("ssdiiisi", $title, $description, $price, $duration, $destinationId, $maxCapacity, $imageUrl, $id);
         if ($stmtUp->execute()) {
             $_SESSION['message'] = 'Tour updated successfully!';
             $_SESSION['message_type'] = 'success';
@@ -160,6 +162,12 @@ require_once __DIR__ . '/../includes/header.php';
                         <label for="destination" class="form-label">Destination *</label>
                         <input type="text" class="form-control" id="destination" name="destination"
                             value="<?php echo htmlspecialchars($destination); ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="max_capacity" class="form-label">Max Capacity *</label>
+                        <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1"
+                            value="<?php echo htmlspecialchars($maxCapacity); ?>" required>
                     </div>
 
                     <div class="mb-3">

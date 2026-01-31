@@ -103,60 +103,67 @@ require_once __DIR__ . '/../includes/header.php';
 </div>
 
 <?php if (empty($bookings)): ?>
-    <div class="alert alert-info text-center">
-        <i class="fas fa-inbox fa-2x mb-2"></i><br>
-        No bookings found
-    </div>
+<div class="alert alert-info text-center">
+    <i class="fas fa-inbox fa-2x mb-2"></i><br>
+    No bookings found
+</div>
 <?php else: ?>
-    <div class="card shadow">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Booking Code</th>
-                        <th>Customer</th>
-                        <th>Tour</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($bookings as $booking): ?>
-                        <tr>
-                            <td><code><?php echo htmlspecialchars($booking['bookingCode']); ?></code></td>
-                            <td>
-                                <strong><?php echo htmlspecialchars($booking['firstname'] . ' ' . $booking['lastname']); ?></strong><br>
-                                <small class="text-muted"><?php echo htmlspecialchars($booking['email']); ?></small>
-                            </td>
-                            <td><?php echo htmlspecialchars(substr($booking['title'], 0, 25)); ?></td>
-                            <td><?php echo formatCurrency($booking['totalPrice']); ?></td>
-                            <td>
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="booking_id" value="<?php echo $booking['id']; ?>">
-                                    <select name="new_status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                        <option value="pending" <?php echo $booking['status'] === 'pending' ? 'selected' : ''; ?>>
-                                            Pending</option>
-                                        <option value="confirmed" <?php echo $booking['status'] === 'confirmed' ? 'selected' : ''; ?>>Confirmed</option>
-                                        <option value="completed" <?php echo $booking['status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                        <option value="cancelled" <?php echo $booking['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                                    </select>
-                                </form>
-                            </td>
-                            <td><?php echo getPaymentStatusBadge($booking['paymentStatus']); ?></td>
-                            <td>
-                                <a href="<?php echo BASE_URL; ?>bookings/booking-details.php?id=<?php echo $booking['id']; ?>"
-                                    class="btn btn-sm btn-outline-primary">View</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+<div class="card shadow">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Booking Code</th>
+                    <th>Customer</th>
+                    <th>Tour</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($bookings as $booking): ?>
+                <tr>
+                    <td><code><?php echo htmlspecialchars($booking['bookingCode']); ?></code></td>
+                    <td>
+                        <strong><?php echo htmlspecialchars($booking['firstname'] . ' ' . $booking['lastname']); ?></strong><br>
+                        <small class="text-muted"><?php echo htmlspecialchars($booking['email']); ?></small>
+                    </td>
+                    <td><?php echo htmlspecialchars(substr($booking['title'], 0, 25)); ?></td>
+                    <td><?php echo formatCurrency($booking['totalPrice']); ?></td>
+                    <td>
+                        <form method="POST" class="d-inline">
+                            <input type="hidden" name="booking_id" value="<?php echo $booking['id']; ?>">
+                            <select name="new_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="pending"
+                                    <?php echo $booking['status'] === 'pending' ? 'selected' : ''; ?>>
+                                    Pending</option>
+                                <option value="confirmed"
+                                    <?php echo $booking['status'] === 'confirmed' ? 'selected' : ''; ?>>Confirmed
+                                </option>
+                                <option value="completed"
+                                    <?php echo $booking['status'] === 'completed' ? 'selected' : ''; ?>>Completed
+                                </option>
+                                <option value="cancelled"
+                                    <?php echo $booking['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled
+                                </option>
+                            </select>
+                        </form>
+                    </td>
+                    <td><?php echo getPaymentStatusBadge($booking['paymentStatus']); ?></td>
+                    <td>
+                        <a href="<?php echo BASE_URL; ?>bookings/booking-details.php?id=<?php echo $booking['id']; ?>"
+                            class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <?php echo getPaginationHTML($pagination, 'page'); ?>
+<?php echo getPaginationHTML($pagination, 'page'); ?>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
