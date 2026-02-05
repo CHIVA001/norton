@@ -35,7 +35,11 @@
                                         <td>{{ $category->id }}</td>
                                         <td>
                                             @if($category->image)
-                                                <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="rounded" style="max-height: 40px; width: auto;">
+                                                @if(str_starts_with($category->image, 'http'))
+                                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" class="rounded" style="max-height: 40px; width: auto;">
+                                                @else
+                                                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="rounded" style="max-height: 40px; width: auto;">
+                                                @endif
                                             @else
                                                 <span class="text-muted">—</span>
                                             @endif

@@ -33,11 +33,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">{{ __('Image') }}</label>
-                            <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+                            <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="previewImage(event)">
                             @error('image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <small class="text-muted">{{ __('Max 2MB. Formats: JPEG, PNG, GIF, WebP') }}</small>
+                            <div id="imagePreview" class="mt-2" style="display: none;">
+                                <img id="preview" src="" alt="Preview" class="rounded" style="max-height: 150px; width: auto;">
+                            </div>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
@@ -49,3 +52,24 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('imagePreview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        previewContainer.style.display = 'none';
+    }
+}
+</script>
+@endpush
